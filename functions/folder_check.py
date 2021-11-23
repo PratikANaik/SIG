@@ -4,10 +4,10 @@ Functions for making and checking the folder tree that the project uses
 import os
 
 # List of folders
-folder_list = ['Annotations', 'Backgrounds', 'ColouredMasks', 'Classes',
+FOLDER_LIST = ['Annotations', 'Backgrounds', 'ColouredMasks', 'Classes',
                  'Composed', 'EFObjects', 'Mask', 'PNG']
 
-def check_for_folders(dir_path=os.getcwd(), list_to_check=folder_list ):
+def check_for_folders(dir_path=os.getcwd(), list_to_check=FOLDER_LIST):
     """
     Iterate through folder list and check if folder exists, if not then it 
     will be created in the directory.
@@ -21,7 +21,7 @@ def check_for_folders(dir_path=os.getcwd(), list_to_check=folder_list ):
         setup_folders(dir_path, list_to_check)
     
     else:
-        for folder in folder_list:
+        for folder in FOLDER_LIST:
             if folder not in os.listdir(dir_path):
                 folder_path = os.path.join(dir_path, folder)
                 os.mkdir(folder_path)
