@@ -11,6 +11,7 @@ images can be used.
 import PIL
 import cv2
 import numpy as np
+import folder_check as fldr_chk
 #%%
 # Salient Object Detection functions
 
@@ -40,8 +41,11 @@ def auto_chroma(image_path):
     upper = np.array([(MedianH +15), 255, 255])
     return lower,upper
 
+# The Foreground Extractor class
 class FgExtractor:
-    def __init__(self, dir_images: str, extractor: str, clean_after_extract: bool):
+    def __init__(self, dir_images: str,
+                        extractor: str,
+                        clean_after_extract: bool):
         """
         Initializing the foreground extractor
         dir_images : Directory containing the subfolders with the images.
@@ -55,10 +59,29 @@ class FgExtractor:
         self.clean_after_extract = clean_after_extract
 
     def print_settings(self):
-        return (f"""Path to directory is {self.dir_images},\n 
-                Extraction is done using {self.extractor}, \n 
+        return (f"""Path to directory is {self.dir_images}, 
+                Extraction is done using {self.extractor},
                 clean_after_extract is {self.clean_after_extract}.""")
 
     def extract_foregrounds(self):
-        print(self)
+        """
+        Function to extract the foregrounds for the 
+        FgExtractor class.
+        """
+
+        fldr_chk.check_for_folders(dir_path="../Data")
+        Classes_path = os.path.join("../Data", "Classes")
+        EFObjects_path = os.path.join("../Data", "EFObjects")
+        Mask_path = os.path.join("../Data", "Mask")
+        
+        # Check for folder structure in Classes 
+        # EFObjects and Mask
+        fldr_chk.replicate_folder_tree(Classes_path,
+                                         EFObjects_path)
+
+        fldr_chk.replicate_folder_tree(Classes_path,
+                                         Mask_path)
+
+        # The folders are in place. Now to go through them
+        # and extract the fg objects from images
 #%%
