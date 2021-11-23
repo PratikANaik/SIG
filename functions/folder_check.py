@@ -33,3 +33,25 @@ def setup_folders(dir_path, folders_to_setup:list):
     for folder in folders_to_setup:
         folder_path = os.path.join(dir_path, folder)
         os.mkdir(folder_path)
+
+def replicate_folder_tree(srcfldr, dstfldr):
+    """
+    Checks if the folders in the source and destination
+    match. If they don't, folders are created in the 
+    destination.
+    """
+    if os.path.isdir(dstfldr):
+        print (os.path.isdir(dstfldr))
+        if os.listdir(srcfldr) != os.listdir(dstfldr):
+            for fldrname in os.listdir(srcfldr): 
+                if fldrname not in os.listdir(dstfldr):
+                    os.mkdir(os.path.join(dstfldr,fldrname))
+        else:
+            print(f"""{os.path.basename(srcfldr)} and
+                    {os.path.basename(srcfldr)}
+                    have the same subfolders""")
+    else:
+        os.mkdir(dstfldr)
+        for fldrname in os.listdir(srcfldr):
+            if fldrname not in os.listdir(dstfldr):
+                os.mkdir(os.path.join(dstfldr,fldrname))
