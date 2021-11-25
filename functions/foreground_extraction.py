@@ -14,10 +14,14 @@ import chroma_key as chr_key
 import os
 from tqdm import tqdm
 
-fldr_chk.check_for_folders(dir_path="../Data")
+fldr_chk.check_for_folders(dir_path="../Data",
+                     list_to_check = fldr_chk.FOLDER_LIST)
+fldr_chk.check_for_folders(dir_path="../Output",
+                    list_to_check=fldr_chk.OUTPUT_FOLDERS)
+
 CLASSES_PATH = os.path.join("../Data", "Classes")
-EFOBJECTS_PATH = os.path.join("../Data", "EFObjects")
-MASK_PATH = os.path.join("../Data", "Mask")
+EFOBJECTS_PATH = os.path.join("../Output", "EFObjects")
+MASK_PATH = os.path.join("../Output", "Mask")
 
 Extensions = ['.jpg', '.png', '.jpeg', '.bmp']
 
