@@ -13,11 +13,12 @@ import folder_check as fldr_chk
 import chroma_key as chr_key
 import os
 from tqdm import tqdm
+from folder_check import FOLDER_LIST, OUTPUT_FOLDERS
 
-fldr_chk.check_for_folders(dir_path="../Data",
-                     list_to_check = fldr_chk.FOLDER_LIST)
-fldr_chk.check_for_folders(dir_path="../Output",
-                    list_to_check=fldr_chk.OUTPUT_FOLDERS)
+fldr_chk.check_for_folders(dir_path="./Data",
+                     list_to_check = FOLDER_LIST)
+fldr_chk.check_for_folders(dir_path="./Output",
+                    list_to_check= OUTPUT_FOLDERS)
 
 CLASSES_PATH = os.path.join("../Data", "Classes")
 EFOBJECTS_PATH = os.path.join("../Output", "EFObjects")
