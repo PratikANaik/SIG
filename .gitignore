@@ -1,5 +1,7 @@
 # Virtual Environment folder
 SIG/
+Data/
+Output/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
