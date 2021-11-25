@@ -58,3 +58,20 @@ def replicate_folder_tree(srcfldr, dstfldr):
         for fldrname in os.listdir(srcfldr):
             if fldrname not in os.listdir(dstfldr):
                 os.mkdir(os.path.join(dstfldr, fldrname))
+
+
+def get_num(target_folder : str,
+             extension : str):
+    
+    """
+    Gets the number of masks already in the target folder to
+    name the next one
+    Input: target_folder = string for path to target folder
+            extension = string for file extension to count
+    Output: Returns int of the number of files in 
+            the target folder
+    """
+    number = [filename for filename in
+                 os.listdir(target_folder)
+                if filename.endswith(extension)]
+    return len(number) +1
