@@ -6,7 +6,7 @@ import os
 # List of Input folders
 FOLDER_LIST= ['Backgrounds', 'Classes', 'EFObjects', 'Mask']
 # List of Output folders
-OUTPUT_FOLDERS = ['Annotations, Composed', 'ColouredMasks']
+OUTPUT_FOLDERS = ['Annotations', 'Composed', 'ColouredMasks']
 
 
 def check_for_folders(dir_path, list_to_check):
