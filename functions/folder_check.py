@@ -4,7 +4,7 @@ Functions for making and checking the folder tree that the project uses
 import os
 
 # List of Input folders
-FOLDER_LIST = ['Backgrounds', 'Classes', 'EFObjects', 'Mask']
+FOLDER_LIST= ['Backgrounds', 'Classes', 'EFObjects', 'Mask']
 # List of Output folders
 OUTPUT_FOLDERS = ['Annotations, Composed', 'ColouredMasks']
 
@@ -69,7 +69,7 @@ def get_num(target_folder : str,
     Input: target_folder = string for path to target folder
             extension = string for file extension to count
     Output: Returns int of the number of files in 
-            the target folder
+        the target folder
     """
     number = [filename for filename in
                  os.listdir(target_folder)
