@@ -4,9 +4,10 @@ Functions for making and checking the folder tree that the project uses
 import os
 
 # List of Input folders
-FOLDER_LIST= ['Backgrounds', 'Classes', 'EFObjects', 'Mask']
+FOLDER_LIST= ['Backgrounds', 'Classes']
 # List of Output folders
-OUTPUT_FOLDERS = ['Annotations', 'Composed', 'ColouredMasks']
+OUTPUT_FOLDERS = ['Annotations', 'Composed',
+        'ColouredMasks', 'EFObjects', 'Mask']
 
 
 def check_for_folders(dir_path, list_to_check):

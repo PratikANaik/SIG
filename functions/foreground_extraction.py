@@ -9,16 +9,12 @@ images can be used.
 """
 # %%
 
-import folder_check as fldr_chk
-import chroma_key as chr_key
+import functions.folder_check as fldr_chk
+import functions.chroma_key as chr_key
 import os
 from tqdm import tqdm
-from folder_check import FOLDER_LIST, OUTPUT_FOLDERS
+from functions.folder_check import FOLDER_LIST, OUTPUT_FOLDERS
 
-fldr_chk.check_for_folders(dir_path="./Data",
-                     list_to_check = FOLDER_LIST)
-fldr_chk.check_for_folders(dir_path="./Output",
-                    list_to_check= OUTPUT_FOLDERS)
 
 Data = "./Data"
 Output = "./Output"
@@ -50,6 +46,17 @@ class FgExtractor:
         return (f"""Path to directory is {self.dir_images}, 
                 Extraction is done using {self.extractor},
                 clean_after_extract is {self.clean_after_extract}.""")
+
+    def prepare_folders(self):
+        """
+        Checks for correct folder structure and creates
+        folders if they do not exist
+        """
+        fldr_chk.check_for_folders(dir_path = Data,
+                            list_to_check = FOLDER_LIST)
+        fldr_chk.check_for_folders(dir_path = Output,
+                            list_to_check= OUTPUT_FOLDERS)
+
 
     def extract_foregrounds(self):
         """
@@ -86,8 +93,5 @@ class FgExtractor:
                                     file)
                         chr_key.extract_with_chromakey(img_path,
                                 mask_folder=msk_subfldr,
-                                extracted_fg_folder=efo_subfldr)
-
-        
-            
+                                extracted_fg_folder=efo_subfldr)            
 # %%

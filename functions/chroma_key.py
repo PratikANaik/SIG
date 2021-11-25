@@ -5,7 +5,7 @@ import cv2
 import numpy as np
 import os
 from PIL import Image
-import folder_check as fldr_chk
+import functions.folder_check as fldr_chk
 #%%
 def auto_chroma(image_path):
     """
