@@ -20,9 +20,12 @@ fldr_chk.check_for_folders(dir_path="./Data",
 fldr_chk.check_for_folders(dir_path="./Output",
                     list_to_check= OUTPUT_FOLDERS)
 
-CLASSES_PATH = os.path.join("../Data", "Classes")
-EFOBJECTS_PATH = os.path.join("../Output", "EFObjects")
-MASK_PATH = os.path.join("../Output", "Mask")
+Data = "./Data"
+Output = "./Output"
+
+CLASSES_PATH = os.path.join(Data, "Classes")
+EFOBJECTS_PATH = os.path.join(Output, "EFObjects")
+MASK_PATH = os.path.join(Output, "Mask")
 
 Extensions = ['.jpg', '.png', '.jpeg', '.bmp']
 
