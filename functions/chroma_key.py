@@ -87,3 +87,14 @@ def get_mask(img_path : str,
     mask_path = f'{mask_path}.png'
     cv2.imwrite(mask_path, mask)
     return mask_path
+
+
+def extract_with_chromakey(img_path : str,
+            mask_folder : str, 
+            extracted_fg_folder: str):
+    """
+    Function which calls the get_mask and get_fg
+    Inputs: img_path = string for path to image
+    """
+    mask_path = get_mask(img_path, mask_folder)
+    get_fg(img_path, mask_path, extracted_fg_folder)
