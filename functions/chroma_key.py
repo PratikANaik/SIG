@@ -53,9 +53,7 @@ def get_fg(img_path : str,
                                 extracted foreground
     """
     image = Image.open(img_path).convert('RGBA')
-    width, height = image.size
-    mask = Image.open(mask_path).convert('L').resize((width,
-                                                    height))
+    mask = Image.open(mask_path).convert('L')
     image.putalpha(mask)
     # Creating the filename
     base_name = os.path.basename(mask_path)
