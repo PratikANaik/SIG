@@ -8,13 +8,18 @@ CascadePSP is used for cleaning the foreground image.
 images can be used.
 """
 # %%
-import PIL
-import cv2
-import numpy as np
+
 import folder_check as fldr_chk
 import chroma_key as chr_key
 import os
+from tqdm import tqdm
 
+fldr_chk.check_for_folders(dir_path="../Data")
+CLASSES_PATH = os.path.join("../Data", "Classes")
+EFOBJECTS_PATH = os.path.join("../Data", "EFObjects")
+MASK_PATH = os.path.join("../Data", "Mask")
+
+Extensions = ['.jpg', '.png', '.jpeg', '.bmp']
 
 # The Foreground Extractor class
 class FgExtractor:
@@ -43,21 +48,38 @@ class FgExtractor:
         Function to extract the foregrounds for the 
         FgExtractor class.
         """
-
-        fldr_chk.check_for_folders(dir_path="../Data")
-        Classes_path = os.path.join("../Data", "Classes")
-        EFObjects_path = os.path.join("../Data", "EFObjects")
-        Mask_path = os.path.join("../Data", "Mask")
-
         # Check for folder structure in Classes
         # EFObjects and Mask
-        fldr_chk.replicate_folder_tree(Classes_path,
-                                       EFObjects_path)
+        fldr_chk.replicate_folder_tree(CLASSES_PATH,
+                                       EFOBJECTS_PATH)
 
-        fldr_chk.replicate_folder_tree(Classes_path,
-                                       Mask_path)
+        fldr_chk.replicate_folder_tree(CLASSES_PATH,
+                                       MASK_PATH)
 
         # The folders are in place. Now to go through them
         # and extract the fg objects from images
+        for subfolder in tqdm(os.listdir(CLASSES_PATH)):
+            cls_subfldr = os.path.join(CLASSES_PATH,
+                         subfolder)
+            efo_subfldr = os.path.join(EFOBJECTS_PATH,
+                            subfolder)
+            msk_subfldr = os.path.join(MASK_PATH, 
+                            subfolder)
+            
 
+            # Switch could be used here when Python gets it
+            if self.extractor == "U2Net":
+                pass
+
+            elif self.extractor == "ChromaKey":
+                for file in tqdm(cls_subfldr):
+                    if file.endswith(tuple(Extensions)):
+                        img_path = os.path.join(cls_subfldr,
+                                    file)
+                        chr_key.extract_with_chromakey(img_path,
+                                mask_folder=msk_subfldr,
+                                extracted_fg_folder=efo_subfldr)
+
+        
+            
 # %%
