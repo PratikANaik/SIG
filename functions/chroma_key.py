@@ -4,7 +4,9 @@ Functions for the chromakey operations
 import cv2
 import numpy as np
 import os
-
+from PIL import Image
+import folder_check as fldr_chk
+#%%
 def auto_chroma(image_path):
     """
     This function gets the image with single coloured 
@@ -34,3 +36,54 @@ def auto_chroma(image_path):
     lower = np.array([(MedianH - 15), 80, 80])
     upper = np.array([(MedianH + 15), 255, 255])
     return lower, upper
+
+
+def get_fg(img_path : str,
+            mask_path : str, 
+            extracted_fg_folder: str):
+    """
+    Extracts the foreground when paths to the image and
+    the mask are passed. Additional inputs are the folder
+    where the extracted foreground is to be saved. And the
+    image number to use as filename.
+    Inputs: img_path = string of path to image
+            mask_path = string of path to mask
+            extracted_fg_folder = string of path to
+                                location for saving
+                                extracted foreground
+    """
+    image = Image.open(img_path).convert('RGBA')
+    width, height = image.size
+    mask = Image.open(mask_path).convert('L').resize((width,
+                                                    height))
+    image.putalpha(mask)
+    # Creating the filename
+    base_name = os.path.basename(mask_path)
+    save_path = os.path.join(extracted_fg_folder, base_name)
+    image.save(save_path)
+    # return image
+
+
+def get_mask(img_path : str,
+            mask_folder: str):
+    """
+    Generates the binary mask for the image path
+    Input: img_path = string for path to image
+            mask_folder = string for path to where mask
+                        will be saved
+    Output: Saves the generated mask to the mask_folder
+            and returns string for path to mask
+    """
+    image = cv2.imread(img_path)
+    img_mask = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
+    lower, upper = auto_chroma(img_path)
+    # Generating the mask
+    mask = cv2.inRange(img_mask, lower, upper)
+    mask = cv2.bitwise_not(mask)
+
+    number = str(fldr_chk.get_num(target_folder=mask_folder,
+                                extension='png'))
+    mask_path = os.path.join(mask_folder, number)
+    mask_path = f'{mask_path}.png'
+    cv2.imwrite(mask_path, mask)
+    return mask_path
