@@ -45,14 +45,13 @@ def replicate_folder_tree(srcfldr, dstfldr):
     destination.
     """
     if os.path.isdir(dstfldr):
-        print(os.path.isdir(dstfldr))
         if os.listdir(srcfldr) != os.listdir(dstfldr):
             for fldrname in os.listdir(srcfldr):
                 if fldrname not in os.listdir(dstfldr):
                     os.mkdir(os.path.join(dstfldr, fldrname))
         else:
             print(f"""{os.path.basename(srcfldr)} and
-                    {os.path.basename(srcfldr)}
+                    {os.path.basename(dstfldr)}
                     have the same subfolders""")
     else:
         os.mkdir(dstfldr)
