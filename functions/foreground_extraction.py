@@ -43,7 +43,7 @@ class FgExtractor:
         self.clean_after_extract = clean_after_extract
 
     def print_settings(self):
-        return (f"""Path to directory is {self.dir_images}, 
+        print(f"""Path to directory is {self.dir_images}, 
                 Extraction is done using {self.extractor},
                 clean_after_extract is {self.clean_after_extract}.""")
 
@@ -87,7 +87,7 @@ class FgExtractor:
                 pass
 
             elif self.extractor == "ChromaKey":
-                for file in tqdm(cls_subfldr):
+                for file in tqdm(os.listdir(cls_subfldr)):
                     if file.endswith(tuple(Extensions)):
                         img_path = os.path.join(cls_subfldr,
                                     file)
