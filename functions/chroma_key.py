@@ -80,7 +80,8 @@ def get_mask(img_path : str,
     # Generating the mask
     mask = cv2.inRange(img_mask, lower, upper)
     mask = cv2.bitwise_not(mask)
-
+    
+	# Saving the mask
     number = str(fldr_chk.get_num(target_folder=mask_folder,
                                 extension='png'))
     mask_path = os.path.join(mask_folder, number)
