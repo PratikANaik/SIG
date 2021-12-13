@@ -15,7 +15,6 @@ import os
 from tqdm import tqdm
 from functions.folder_check import FOLDER_LIST, OUTPUT_FOLDERS
 
-
 Data = "./Data"
 Output = "./Output"
 
@@ -93,5 +92,5 @@ class FgExtractor:
                                     file)
                         chr_key.extract_with_chromakey(img_path,
                                 mask_folder=msk_subfldr,
-                                extracted_fg_folder=efo_subfldr)            
+                                extracted_fg_folder=efo_subfldr)          
 # %%
