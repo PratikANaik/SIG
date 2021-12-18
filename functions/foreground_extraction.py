@@ -14,6 +14,7 @@ import functions.chroma_key as chr_key
 import os
 from tqdm import tqdm
 from functions.folder_check import FOLDER_LIST, OUTPUT_FOLDERS
+import functions.u2net_infer as u2
 
 Data = "./Data"
 Output = "./Output"
@@ -81,9 +82,12 @@ class FgExtractor:
                             subfolder)
             
 
-            # Switch could be used here when Python gets it
+            # Switch could be used here when Python3.10 gets it
             if self.extractor == "U2Net":
-                pass
+                u2.extract_foregrounds_U2(source_folder=cls_subfldr,
+                                        target_folder=efo_subfldr,
+                                        mask_folder=msk_subfldr,
+                                        clean_up_post=True)
 
             elif self.extractor == "ChromaKey":
                 for file in tqdm(os.listdir(cls_subfldr)):
