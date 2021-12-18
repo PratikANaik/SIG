@@ -87,7 +87,7 @@ class FgExtractor:
                 u2.extract_foregrounds_U2(source_folder=cls_subfldr,
                                         target_folder=efo_subfldr,
                                         mask_folder=msk_subfldr,
-                                        clean_up_post=True)
+                                        clean_up_post=self.clean_after_extract)
 
             elif self.extractor == "ChromaKey":
                 for file in tqdm(os.listdir(cls_subfldr)):
