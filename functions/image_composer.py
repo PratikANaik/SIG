@@ -1,5 +1,5 @@
 import cv2
-from PIL import Image
+from PIL import Image, ImageOps
 from tqdm import tqdm
 from functions.folder_check import FOLDER_LIST, OUTPUT_FOLDERS
 import os
@@ -7,6 +7,9 @@ from functions import folder_check as fldr_chk
 import random
 
 OUTPUT_EXTENSION = '.jpg'
+RED = 128
+BLUE = 200
+
 
 class ImgComposer:
     def __init__(self,
@@ -71,4 +74,74 @@ class ImgComposer:
                         background.size,
                         color='black')
             
+            # TODO: Adding negative examples
 
+            for green, obj in greenval_and_obj.items():
+                fg_point = os.path.join(self.efo_directory, obj)
+                if len(os.listdir(fg_point)) != 0:
+                    fg = random.choice(os.listdir(fg_point))
+                    fg_path = os.path.join(fg_point, fg)
+                    msk_fldr = os.path.join(os.dirname(self.efo_directory),
+                            OUTPUT_FOLDERS[4])
+                    msk_path = os.path.join(msk_fldr, obj, fg)
+                    mask = Image.open(msk_path).convert('L')
+                    foreground = Image.open(fg_path)
+                    ColourRGB = (RED, green, BLUE)
+
+
+def rotated(foreground, mask,
+            angle=random.randrange(0,359)):
+    """
+    Function for rotating the foreground object
+    Also performs the same operation for the mask
+    Inputs:
+    foreground = PIL Image of foreground
+    mask = PIL Image of mask
+    angle = angle in degrees to rotate the foreground
+    Outputs:
+    foreground and mask with rotation performed
+    """
+    foreground = foreground.rotate(angle,
+                    resample=Image.BICUBIC)
+    mask = mask.rotate(angle,
+            resample=Image.BICUBIC)
+    return foreground, mask
+
+def flipped(foreground, mask,
+            flip_foreground=random.choice((True, False))):
+    """
+    Performs Mirror operation on the foreground
+    object and the mask of the foreground
+    Inputs:
+    foreground = PIL Image of foreground
+    mask = PIL Image of mask
+    flip_foreground = Bool to decide whether
+    or not to mirror the foreground object
+    Outputs:
+    foreground and mask with the operation
+    performed
+    """
+    if flip_foreground:
+        foreground = ImageOps.mirror(foreground)
+        mask = ImageOps.mirror(mask)
+    
+    return foreground, mask
+
+def placed(foreground, background, mask,
+            placed_at=None,
+            bin_mask=None):
+    """
+    Function for placing the foreground object
+    on the background.
+    Inputs:
+    foreground = PIL Image of the foreground
+    background = PIL Image of the background
+    mask = PIL Image of the background
+    placed_at = Tuple containing x and 
+                y co-ordinates
+    bin_mask = 
+    Outputs:
+    returns background and the final
+    coloured annotation mask
+
+    """
