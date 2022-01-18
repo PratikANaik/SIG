@@ -129,7 +129,8 @@ def flipped(foreground, mask,
 
 def placed(foreground, background, mask,
             placed_at=None,
-            bin_mask=None):
+            bin_mask=None,
+            mask_colour=None):
     """
     Function for placing the foreground object
     on the background.
@@ -139,9 +140,50 @@ def placed(foreground, background, mask,
     mask = PIL Image of the background
     placed_at = Tuple containing x and 
                 y co-ordinates
-    bin_mask = 
-    Outputs:
-    returns background and the final
-    coloured annotation mask
+    bin_mask = PIL Image of the final 
+                annotation mask
+    mask_colour = Tuple of RGB values for mask
 
+    Outputs:
+    returns composed image and the final
+    coloured annotation mask
     """
+    if placed_at == None:
+        bg_wide, bg_high = background.size
+        # Location on X axis
+        x_low_limit = -0.1*bg_wide
+        x_up_limit = 0.8*bg_wide
+        x = random.randrange(x_low_limit,
+                            x_up_limit)
+        # Location on Y axis
+        y_low_limit = -0.1*bg_high
+        y_up_limit = 0.8*bg_high
+        y = random.randrange(y_low_limit,
+                            y_up_limit)
+        placed_at = (x,y)
+    
+    # Compositing the foreground on the background
+    background.paste(foreground,
+                    placed_at,
+                    mask)
+
+    if bin_mask != None:
+        mask_coloured = mask_maker(mask,
+                            mask_colour)
+        bin_mask.paste(mask_coloured, placed_at,
+                        mask)
+    return background, bin_mask
+
+def mask_maker(mask, mask_colour):
+    """
+    Function to create the coloured mask for
+    compositing on the annotation mask
+    Inputs:
+    mask = PIL Image of the foreground mask
+    mask_coloured = Tuple of RGB values for mask
+    """
+    w, h = mask.size
+    mask_coloured = Image.new("RGB", (w,h),
+                            mask_colour)
+    mask_coloured.putalpha(mask)
+    return mask_coloured
