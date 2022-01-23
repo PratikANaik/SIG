@@ -124,7 +124,7 @@ def scaled(foreground, background, mask,
                         Image.BICUBIC)
         resized_mask = mask.resize(new_size,
                         Image.BICUBIC)
-        return resized_fg, resized_mask
+    return resized_fg, resized_mask
 
 def rotated(foreground, mask,
             angle=random.randrange(0,359)):
