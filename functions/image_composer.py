@@ -5,6 +5,7 @@ from functions.folder_check import FOLDER_LIST, OUTPUT_FOLDERS
 import os
 from functions import folder_check as fldr_chk
 import random
+import math
 
 OUTPUT_EXTENSION = '.jpg'
 RED = 128
@@ -88,6 +89,42 @@ class ImgComposer:
                     foreground = Image.open(fg_path)
                     ColourRGB = (RED, green, BLUE)
 
+                    foreground, mask = scaled(foreground,
+                                            background, mask)
+                    foreground, mask = rotated(foreground, mask)
+                    foreground, mask = flipped(foreground, mask)
+                    background, bin_mask = placed(foreground,
+                                                background,
+                                                mask,
+                                                bin_mask,
+                                                ColourRGB)
+
+def scaled(foreground, background, mask,
+            scaled_to=None):
+    """
+    Function for scaling the foreground object
+    with respect to the background
+    Inputs:
+    foreground = PIL Image of the foreground
+    background = PIL Image of the background
+    mask = PIL Image of foreground mask
+    scaled_to = float; scaling factor of foreground,
+            if None then uses random values
+            with respect to the background
+    """
+    if scaled_to is None:
+        bg_width, _ = background.size
+        fg_width, fg_height = foreground.size
+        scaled_to = random.randrange((math.floor(0.005*bg_width)),
+                        math.ceil(0.75*bg_width))
+        new_width = fg_width * scaled_to
+        new_height = fg_height * scaled_to
+        new_size = (new_width, new_height)
+        resized_fg = foreground.resize(new_size,
+                        Image.BICUBIC)
+        resized_mask = mask.resize(new_size,
+                        Image.BICUBIC)
+        return resized_fg, resized_mask
 
 def rotated(foreground, mask,
             angle=random.randrange(0,359)):
