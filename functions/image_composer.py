@@ -20,7 +20,8 @@ class ImgComposer:
                 max_objects_in_image:int,
                 output_directory:str,
                 efo_directory:str,
-                include_negative_examples=[]):
+                include_negative_examples=[],
+                datafolder = './Data'):
         self.classes_to_include = classes_to_include
         self.include_negative_examples = include_negative_examples
         self.num_of_images = num_of_images
@@ -28,6 +29,7 @@ class ImgComposer:
         self.output_directory = output_directory
         self.efo_directory = efo_directory
         self.resolution = resolution # (width, height)
+        self.datafolder = datafolder
     
     def compose(self):
         for imgno in tqdm(range(self.num_of_images)):
@@ -63,10 +65,10 @@ class ImgComposer:
                 Num += 1
             
             # Background image
-            random_bg = random.choice(os.listdir(FOLDER_LIST[0]))
-            to_background = os.path.join(FOLDER_LIST[0],
-                            random_bg)
-            background = Image.open(to_background)
+            bg_folder = os.path.join(self.datafolder,(FOLDER_LIST[0]))
+            random_bg = random.choice(os.listdir(bg_folder))
+            bg_path = os.path.join(bg_folder, random_bg)
+            background = Image.open(bg_path)
             background = background.resize(self.resolution,
                             Image.ANTIALIAS)
             
@@ -82,7 +84,7 @@ class ImgComposer:
                 if len(os.listdir(fg_point)) != 0:
                     fg = random.choice(os.listdir(fg_point))
                     fg_path = os.path.join(fg_point, fg)
-                    msk_fldr = os.path.join(os.dirname(self.efo_directory),
+                    msk_fldr = os.path.join(os.path.dirname(self.efo_directory),
                             OUTPUT_FOLDERS[4])
                     msk_path = os.path.join(msk_fldr, obj, fg)
                     mask = Image.open(msk_path).convert('L')
@@ -98,6 +100,8 @@ class ImgComposer:
                                                 mask,
                                                 bin_mask,
                                                 ColourRGB)
+                    background.save("test.jpg")
+                    # mask.show()
 
 def scaled(foreground, background, mask,
             scaled_to=None):
@@ -115,10 +119,9 @@ def scaled(foreground, background, mask,
     if scaled_to is None:
         bg_width, _ = background.size
         fg_width, fg_height = foreground.size
-        scaled_to = random.randrange((math.floor(0.005*bg_width)),
-                        math.ceil(0.75*bg_width))
-        new_width = fg_width * scaled_to
-        new_height = fg_height * scaled_to
+        new_width = random.randrange((math.floor(0.005*bg_width)),
+                        math.ceil(0.6*bg_width))
+        new_height = int(fg_height * (new_width/fg_width))
         new_size = (new_width, new_height)
         resized_fg = foreground.resize(new_size,
                         Image.BICUBIC)
@@ -165,9 +168,9 @@ def flipped(foreground, mask,
     return foreground, mask
 
 def placed(foreground, background, mask,
-            placed_at=None,
             bin_mask=None,
-            mask_colour=None):
+            mask_colour=None,
+            placed_at=None):
     """
     Function for placing the foreground object
     on the background.
