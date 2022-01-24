@@ -41,7 +41,8 @@ class ImgComposer:
             img_name = f"{final_path}.jpg"
             
             # Coloured annotation mask
-            cm_path = os.path.join(self.output_directory,
+            output_dir = os.path.dirname(self.output_directory)
+            cm_path = os.path.join(output_dir,
                                     OUTPUT_FOLDERS[2],
                                     img_number)
             cm_name = f"{cm_path}.png"
@@ -100,8 +101,8 @@ class ImgComposer:
                                                 mask,
                                                 bin_mask,
                                                 ColourRGB)
-                    background.save("test.jpg")
-                    # mask.show()
+            background.save(img_name)
+            bin_mask.save(cm_name)
 
 def scaled(foreground, background, mask,
             scaled_to=None):
