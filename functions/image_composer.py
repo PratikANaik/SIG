@@ -108,7 +108,8 @@ class ImgComposer:
             # Saving the annotation masks
             save_annotation_masks(bin_mask,
                                 img_number,
-                                greenval_and_obj)
+                                greenval_and_obj,
+                                output_dir)
 
 def scaled(foreground, background, mask,
             scaled_to=None):
@@ -237,7 +238,8 @@ def mask_maker(mask, mask_colour):
 
 def save_annotation_masks(bin_mask,
                         img_number:str,
-                        dict_color_object:dict):
+                        dict_color_object:dict,
+                        output_dir:str):
     """
     Function for saving the annotation masks
     of the different objects in the format 
@@ -247,13 +249,21 @@ def save_annotation_masks(bin_mask,
     dict_color_object= dict; dictionary of 
                         green value and 
                         object name
+    output_dir = str; Path to directory where
+                annotation masks will be saved
     """
     instance_num = 0
     for green, object in dict_color_object.items():
         object = object.lower()
-        annotationmask_name = f"{img_number}_{object}_{instance_num}"
-        anno_mask = annotation_mask_maker(bin_mask,)
-
+        annotationmask_name = f"{img_number}_{object}_{instance_num}.png"
+        ColourBGR = (BLUE, green, RED)
+        anno_mask = annotation_mask_maker(bin_mask,
+                                        ColourBGR)
+        anno_mask_path = os.path.join(output_dir,
+                        OUTPUT_FOLDERS[0],
+                        annotationmask_name)
+        instance_num +=1
+        cv2.imwrite(anno_mask_path, anno_mask)
 
 def annotation_mask_maker(bin_mask, ColourBGR):
     """
