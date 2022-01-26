@@ -6,6 +6,7 @@ import os
 from functions import folder_check as fldr_chk
 import random
 import math
+import numpy as np
 
 OUTPUT_EXTENSION = '.jpg'
 RED = 128
@@ -103,6 +104,11 @@ class ImgComposer:
                                                 ColourRGB)
             background.save(img_name)
             bin_mask.save(cm_name)
+
+            # Saving the annotation masks
+            save_annotation_masks(bin_mask,
+                                img_number,
+                                greenval_and_obj)
 
 def scaled(foreground, background, mask,
             scaled_to=None):
@@ -228,3 +234,37 @@ def mask_maker(mask, mask_colour):
                             mask_colour)
     mask_coloured.putalpha(mask)
     return mask_coloured
+
+def save_annotation_masks(bin_mask,
+                        img_number:str,
+                        dict_color_object:dict):
+    """
+    Function for saving the annotation masks
+    of the different objects in the format 
+    required for PyCocoCreatorTools
+    img_number= str; image number to save the
+                binary mask
+    dict_color_object= dict; dictionary of 
+                        green value and 
+                        object name
+    """
+    instance_num = 0
+    for green, object in dict_color_object.items():
+        object = object.lower()
+        annotationmask_name = f"{img_number}_{object}_{instance_num}"
+        anno_mask = annotation_mask_maker(bin_mask,)
+
+
+def annotation_mask_maker(bin_mask, ColourBGR):
+    """
+    Makes a black and white annotation masks for each object instance 
+    Input: The binary mask with each object instance in a different colour, Colour is the tuple in BGR corresponding to object instance.
+    Output: A binary mask showing the object instance in white while the rest of the image is black.
+    """
+    kernel = np.ones((3,3),np.uint8)
+    thresh_l = ColourBGR
+    thresh_h = ColourBGR
+    bin_mask = cv2.cvtColor(np.array(bin_mask), cv2.COLOR_RGB2BGR)
+    anno_mask = cv2.inRange(bin_mask, thresh_l, thresh_h)
+    anno_mask = cv2.morphologyEx(anno_mask, cv2.MORPH_OPEN, kernel)
+    return anno_mask
