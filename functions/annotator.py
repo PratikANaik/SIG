@@ -33,7 +33,7 @@ LICENSES = [
 CATEGORIES = [
     {"supercategory": "food","id": 1,"name": "pizza"},
     {"supercategory": "sport","id": 2,"name": "racket"},
-    {"supercategory": "human","id": 3,"name": "person"},
+    {"supercategory": "person","id": 3,"name": "person"}
 ]
 
 def filter_for_jpeg(root, files):
@@ -102,7 +102,9 @@ def annotate(image_dir, annotation_dir,
                     
                     annotation_info = pycococreatortools.create_annotation_info(
                             segmentation_id, image_id,
-                            category_info, image.size,
+                            category_info,
+                            binary_mask,
+                            image.size,
                             tolerance=2)
 
                     if annotation_info is not None:
@@ -113,6 +115,6 @@ def annotate(image_dir, annotation_dir,
             image_id += 1
 
         json_path = f'./Output/instances_{dataset_name}.json'
-        with open(json_path) as output_json:
+        with open(json_path, 'w') as output_json:
             json.dump(coco_output, output_json)
                 
